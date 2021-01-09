@@ -1,0 +1,657 @@
+<!--
+	Name: Joseph Piquero
+	Purpose: Project
+	Date: April 24, 2020
+-->
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="The Whiskey">
+		<meta name="keywords" content="whiskey, whiskey enthusiast, whiskey lover, budget whiskey, popular whiskey, most popular whiskey, top 10 whiskey"> 
+		<link rel="stylesheet" href="stylesheet\style.css">
+		<title>Project</title>
+	</head>
+	<body onload="populateCategory(category, categorySelector);">
+		<div id = "wrapper">
+			<header>
+				<nav>
+					<a href="Project_Optional_Starting_Layout.html"><img id="logo" src="logo3.png"></a>
+				</nav>
+			</header>
+
+			<form id="storeOnline">
+				<section class="section" id="firstSection">
+				
+					<div id="dateCurrency">
+						
+						<span id="dateArea" >Date/Time</span>
+						<br/>
+						<span  id="currency">
+							Currency: </span>
+							<img class="currencyFlag" id = "curFlag" src="flag1.jpg" width="35px"/>
+							<select id="currencySelector" onchange="currencyChange(allWhiskey, cartArray)">
+								<option selected value="CAD">CAD</option>
+								<option value="USD">USD</option>
+								<option value="GBP">GBP</option>
+							</select>
+						
+					</div>
+					<br>
+					<fieldset> <legend>Store Items</legend>
+						<select id="displayFilter" onchange="changeCategory(allWhiskey);">
+							<option>All</option>
+						</select>
+						<br/>
+						<br/>
+						<div id="inventoryOutput">
+							<table border ="1" cellspacing = "0" width = "100%" height = "100%" id = "tableOutput1">
+							</table>
+						</div>
+					</fieldset>
+					<br>
+				</section>
+
+				
+				<section class="section" id="secondSection">
+					<fieldset class="group1" id="group1a"> <legend>Select Items</legend>
+						<p>
+							Item ID: <input type="text" id="addItemId" />
+							&nbsp;
+							<span id="addIDValidationMessage"></span>
+						</p>
+						<p>
+							Qty: <input type="number" id="addItemQty" />
+							&nbsp;
+							<span id="addQtyValidationMessage"></span>
+						</p>
+						<p>
+							<input type="button" class="button" value="Item Details" onclick="itemDetails();" />
+							<input type="button" class="button" value="Add Item" onclick="addToCart(allWhiskey);"/>
+							<input type="button" class="button" value="Remove Item" onclick="removeToCart();"/>
+						</p>
+					</fieldset>
+					<br>
+				</section>
+
+				<section class="section" id="thirdSection">
+					<fieldset class="group1" id="group1b"> <legend>Your Cart</legend>
+						<!-- <span><strong>| ID | Price | Qty | Subtotal |</strong></span> -->
+						<br>
+						<div id="cartOutput">
+							<table border ="1" cellspacing = "0" width = "100%" height = "100%" id = "tableOutput2"></table>
+						</div>
+						<br><hr>
+						<div id="cartCheckout">
+							<table border ="1" cellspacing = "0" width = "100%" height = "100%" id = "tableOutput3"></table>
+						</div>
+						<p>
+						<input type="button" class="button" id="checkOutBtn" value="Check Out" onclick="location.reload()">
+						</p>
+					</fieldset>
+					<br>
+				</section>
+				
+
+				<section class="section" id="fourthSection">
+					<fieldset> <legend>Review an Item</legend>
+						<p>Product ID: <input type="text" id="reviewId" />&nbsp;<span id="reviewIdMsg"></span></p>
+						<p>Review:</p>
+						<textarea rows="4" cols="80" id="reviewDesc" size="100"></textarea>
+						<p><input type="button" class="button" value="Review" onclick="addReview()"/></p>
+					</fieldset>
+				</section>
+			</form>
+			<footer>
+				<nav>
+					<div id="firstcolumn">
+						<p>Contact Us: </p>
+						<a href="mailto:ddWhiskey@info.com" id="contactUs">ddWhiskey@info.com</a>
+					</div>
+					<div id="secondcolumn">
+						<p>Connect with Us</p>
+						<a href="http://facebook.com"><img src="fb.png"></a>
+						<a href="http://twitter.com"><img src="tw.png"></a>
+						<a href="http://instagram.com"><img src="ig.png"></a>
+					</div>
+				</nav>
+			</footer>
+		</div>
+		<!-- Javascript -->
+		<script>
+			//Simplify table variable later after done. Fix function names.
+
+
+			// variable and costant to create a list of dropdown on select option
+			const category = ["Popular Whiskey", "Budget Whiskey", "Mid-Class Whiskey", "Top-Tier Whiskey"],
+				arrayHeader = ["ID", "Product Name", "Price", "Qty", "Max", "Category", "Image"], 
+				arrayHeader1 = ["ID", "Price", "Qty", "Subtotal"],
+				arrayheader2 = ["Items Subtotal:", "Estimated Shipping:", "Subtotal:", "Estimated Tax:", "Order Total:"];
+
+			const num = 2, num1 = 1, num2 = 3, num3 = [0, 0, 0, 0, 0];
+
+			//img tag
+			var flagChanger = document.getElementById("curFlag");
+
+			var showDate = new Date;
+			document.getElementById("dateArea").innerHTML = showDate.getMonth()+1+"-"+showDate.getDate()+"-"+showDate.getFullYear();
+
+			var categorySelector = document.getElementById("displayFilter");
+			var currencySelector = document.getElementById("currencySelector");
+
+			var tableID =  document.getElementById("tableOutput1"),
+				tableID1 = document.getElementById("tableOutput2"),
+				tableID2 = document.getElementById("tableOutput3");
+
+			var addItemInput = document.getElementById("addItemId"), 
+				addQtyInput = document.getElementById("addItemQty"),
+				addReviewInput = document.getElementById("reviewId");
+				reviewInput = document.getElementById("reviewDesc");
+
+			
+
+			var allWhiskey = [], cartArray = [], computedArray = [];
+			
+			var reviews = [jd = [], jameson = [], jimbeam = [], crownroyal = [], canadianclub = [], bv = [], fr = [], mm = [], wr = [], bd = [], hp = [], clyne = [], 
+				kilk = [], glen = [], hm = [], sp = [], balv = [], laga = [], tm = []];
+
+			
+
+
+			allWhiskey.push(new createObject("WHSKY00001", "Jack Daniels",       34.95, 200, 12, "Popular Whiskey", "img0.jpg", "A top-selling bottling from the Jack Daniel distillery, the mashbill is made up of 80% corn, 12% rye and 8% malt. The spirit is filtered through 10 feet of sugar maple charcoal to produce a mellow, slightly smoky character, thus making it Tennessee whiskey..."));
+			allWhiskey.push(new createObject("WHSKY00002", "Jameson",            36.95, 200, 12, "Popular Whiskey", "img1.jpg", "Produced at the Midleton Distillery, Jameson is Ireland's quintessential Irish blend, a classic. Jim Murray even awarded it an incredible 95 points!"));
+			allWhiskey.push(new createObject("WHSKY00003", "Jim Beam",           34.95, 200, 12, "Popular Whiskey", "img2.jpg", "Jim Beam bourbon undergoes distillation at lower temperatures and is distilled to no more than 62.5%, the White label is aged for four years and has quite a high percentage of rye in the mashbill."));
+			allWhiskey.push(new createObject("WHSKY00004", "Crown Royal",        34.95, 200, 12, "Popular Whiskey", "img3.jpg", "The most famous of all the Canadian whiskies, Crown Royal is made with over 50 different whiskies, and they've been making it for over 70 years. It was first created in 1939 to celebrate the visit of King George VI to Canada."));
+			allWhiskey.push(new createObject("WHSKY00005", "Canadian Club",      34.95, 150, 10, "Popular Whiskey", "img4.jpg", "The renowned Canadian whisky, married in white oak barrels. Canadian Club was founded by whisky mogul Hiram Walker."));
+
+			allWhiskey.push(new createObject("WHSKY00006", "Black Velvet",       15.95, 200, 12, "Budget Whiskey", "img5.jpg", "Not produced Mississippi in the middle of a dry spell, nor from sparkling wine and stout, no this is Canadian whisky! A great blend first introduced in 1951, you'll be always wanting more, it'll leave you longing for..."));
+			allWhiskey.push(new createObject("WHSKY00007", "Four Roses",         30.95, 200, 12, "Budget Whiskey", "img6.jpg", "A brand that dates back to the late 19 century. This Yellow Label bottling of Four Roses was released for the European and Japanese markets and is made up of whiskeys aged between 5 and 6 years of age."));
+			allWhiskey.push(new createObject("WHSKY00008", "Maker's Mark",       42.95, 150, 10, "Budget Whiskey", "img7.jpg", "Maker’s Mark maintain that they distil their bourbon to the lowest proof of any US whiskey distillery. This proffers a bourbon that retains a rich flavour. Developed by Bill Samuels Sr, he replaced rye with red winter wheat to reduce the burning sensation."));
+			allWhiskey.push(new createObject("WHSKY00009", "Woodford Reserve",   26.95, 200, 12, "Budget Whiskey", "img8.jpg", "The mashbill for Woodford Reserve features a high percentage of rye: 72% corn, 18% rye and 10% malt. Unusual also for being triple distilled and having the lowest proof upon entering the barrel where it matures for at least six years. A must have Kentucky bourbon. Makes a wonderful Old-Fashioned cocktail!"));
+			allWhiskey.push(new createObject("WHSKY00010", "Buchanan's Delux",   23.58, 150, 10, "Budget Whiskey", "img9.jpg", "A bottle of 12 year old Buchanan's D Luxe blended Scotch whisky, which we believe to have been produced in the 1970s. Buchanan's have been powerhouses of blended whisky production throughout the spirit's history, with their Black & White blend being a massively popular expression."));
+
+			allWhiskey.push(new createObject("WHSKY00011", "Highland Park",      64.95, 150, 10, "Mid-Class Whiskey", "img10.jpg", "The Ambassador's Choice from Highland Park is a 10 year old single malt Scotch whisky, which has been matured using a proportion of American oak casks, bestowing rich vanilla upon the island whisky. It was originally released for Sweden."));
+			allWhiskey.push(new createObject("WHSKY00012", "Clynelish",          75.95, 100,  5, "Mid-Class Whiskey", "img11.jpg", "A coastal and peaty single malt, the flagship expression from Clynelish boasts a fabulous flavour profile filled with its distinctive waxy notes. Clynelish is the successor to Brora which closed in 1983, which it is built opposite. A well rounded Highlander, though this expression is a bit less peaty than the Brora bottlings of yore."));
+			allWhiskey.push(new createObject("WHSKY00013", "Kilkerran",          86.75, 100,  5, "Mid-Class Whiskey", "img12.jpg", "After 12 years and a bundle of Work In Progress bottlings, the first core release of single malt Scotch whisky from the Glengyle Distillery after reopening in 2004 is ready! The Kilkerran 12 Year Old is lightly peated and non-chill filtered, and has been matured in a combination of 70% bourbon casks and 30% Sherry casks."));
+			allWhiskey.push(new createObject("WHSKY00014", "Glenlivet",          87.85, 100,  5, "Mid-Class Whiskey", "img13.jpg", "A 1980s bottling of classic Glenlivet 12 Year Old - especially attractive now as The Glenlivet 12 was replaced by Founder's Reserve in markets such as the UK in March 2015."));
+			allWhiskey.push(new createObject("WHSKY00015", "Henry McKenna",      89.95, 100,  5, "Mid-Class Whiskey", "img14.jpg", "Henry McKenna Kentucky Bourbon comes from Fairfax, KY. Their 10 Year Old Single Barrel release was bottled in bond and is one of the small number of \"extra aged\" bourbons currently in production that is. Beautifully packaged and, funnily enough, the bourbon in the bottle lives up to that beauty. Good show!"));
+
+			allWhiskey.push(new createObject("WHSKY00016", "SpringBank",        125.95,  50,  3, "Top-Tier Whiskey", "img15.jpg", "Springbank regularly releases batches of its 12 Year Old Cask Strength expression, and they are always welcome sights. This is yet another stunning bottling from the series, which was drawn from 65% bourbon casks and 35% sherry casks before being bottled at a robust 55.3% ABV."));
+			allWhiskey.push(new createObject("WHSKY00017", "The Balvenie",      145.75,  50,  3, "Top-Tier Whiskey", "img16.jpg", "Unveiled in 2014, the 15 Year Old Single Barrel Sherry Cask is a wonderful sight from Balvenie - single malt Scotch whisky fully matured in Sherry casks. These are released in batches of no larger than 800 bottles from a single cask, each one being hand numbered. Although no two casks are the same, and therefore won't produce an identical single malt, the casks are carefully selected by Balvenie's Malt Master and feature a consistent, rich, spiced character, complimented by hints of elegant oak."));
+			allWhiskey.push(new createObject("WHSKY00018", "Lagavulin",         179.95,  20,  2, "Top-Tier Whiskey", "img17.jpg", "The least expensive of the 2015 Diageo Special Releases (as the unpeated Caol Ila was a 17 year old), the 12 year old is now a staple and a firm whisky fan favourite, this being the thirteenth release in the series."));
+			allWhiskey.push(new createObject("WHSKY00019", "The Macallan",      349.95,  10,  1, "Top-Tier Whiskey", "img18.jpg", "This 18 year old Macallan single malt sits at the peak of the Triple Cask range (which replaced the Fine Oak range in mid-2018). With maturation taking place in a combination of European sherry seasoned casks, American sherry seasoned casks and American ex-bourbon casks, this expression boasts bountiful notes of vanilla, dried fruit and woody spice."));
+			
+			reviews[0].push("great drink for the price!");
+			reviews[0].push("pareho lang nmn samin mas mura pa");
+
+			function addReview(){
+				for (i = 0; i < allWhiskey.length; ++i){
+					if(addReviewInput.value == allWhiskey[i].ID && addReviewInput.value !== ""){
+						reviews[i].push(reviewInput.value);
+						alert("thanks for the review");
+						break;
+					}
+					else if (addReviewInput.value === "") {
+						alert("Product ID should not be empty");
+						break;
+					}
+					else if (reviewInput.value === ""){
+						alert("Review Description Should not be Empty!");
+						break;
+					}
+				}
+				if (i === allWhiskey.length){
+					alert("Product ID not found")
+				}
+				addReviewInput.value = "";
+				reviewInput.value = "";
+			}
+			
+			function itemDetails(){
+				for(i = 0; i < allWhiskey.length; ++i){
+					if (addItemInput.value == allWhiskey[i].ID){
+						var str ="";
+						for (a = 0; a < reviews[0].length; ++a){
+							str += reviews[0][a] + "\n";
+						}
+						console.log(str)
+						alert("Item ID: " + allWhiskey[i].ID +"\nName: " + allWhiskey[i].Name + "\nPrice: " +"C$"+ allWhiskey[i].Price + "\nShipping Cost: " + "C$20" + "\nOn Stock: " + allWhiskey[i].QOH + "\nDescription: \n" + allWhiskey[i].Desc + "\n\nReviews: \n" + str);
+						
+						break
+					}
+					else if ( addItemInput.value === ""){
+						alert("Invalid Input");
+						break;
+					}
+				}
+			}
+
+			//Computation for order Summary that consist of shipping fee, tax, and over all total of the order
+			function computeTotal(subTotal){
+				if (subTotal > 1 && subTotal < 200){
+					var shipFee = 20;
+				}
+				else {
+					shipFee = 0;
+				}
+				var subTotal2 = shipFee + subTotal;
+				var estTax = subTotal2 * .13;
+				var ordTotal = subTotal2 + estTax;
+				computedArray.unshift(subTotal.toFixed(2), shipFee.toFixed(2), subTotal2.toFixed(2), estTax.toFixed(2), ordTotal.toFixed(2));
+				if (computedArray.length > 5){computedArray.splice(5, computedArray.length)}
+				console.log(computedArray)
+			}
+
+			function removeToCart(){
+				var subTotal1 = 0;
+				for (i = 0; i < cartArray.length; ++i){
+					if (addItemInput.value == cartArray[i].ID && cartArray[i].Qty == addQtyInput.value && addQtyInput.value != ""){
+						var y = cartArray.splice(i, num1);
+						y[i].Stotal = y[i].Price * 0;
+						y[i].Qty = 0;
+						cartArray.unshift(new createObjectPlus("REMOVED", y[i].Price, y[i].Qty, y[i].Stotal));
+						tableID1.innerHTML = "";
+						createHeader(arrayHeader1, tableID1);
+						addItemInput.value = "";
+						addQtyInput.value = "";
+						for (z = 0; z < cartArray.length; ++z){
+							var table = document.getElementsByTagName("table")[1];
+							var newRow = table.insertRow(y);
+							newRow.insertCell(0).innerHTML = cartArray[z].ID;
+							newRow.insertCell(1).innerHTML = "C$" + cartArray[z].Price;
+							newRow.insertCell(2).innerHTML = cartArray[z].Qty;
+							newRow.insertCell(3).innerHTML = "C$" + cartArray[z].Stotal;
+							subTotal1 = subTotal1 + cartArray[z].Stotal;
+							console.log(cartArray);
+							// createOrderSummary(arrayheader2, num3);
+						}
+					}
+					else if (addItemInput.value == cartArray[i].ID && cartArray[i].Qty > addQtyInput.value && addQtyInput.value != ""){
+						var x = cartArray.splice(i, num1);
+						x[i].Qty -= addQtyInput.value;
+						x[i].Stotal = x[i].Price * x[i].Qty;
+						cartArray.unshift(new createObjectPlus(x[i].ID, x[i].Price, x[i].Qty, x[i].Stotal));
+						addItemInput.value = "";
+						addQtyInput.value = "";
+
+						tableID1.innerHTML = "";
+						createHeader(arrayHeader1, tableID1);
+						console.log(cartArray)
+						for (y = 0; y < cartArray.length; ++y){
+							var table = document.getElementsByTagName("table")[1];
+							var newRow = table.insertRow(y);
+							newRow.insertCell(0).innerHTML = cartArray[y].ID;
+							newRow.insertCell(1).innerHTML = "C$" + cartArray[y].Price;
+							newRow.insertCell(2).innerHTML = cartArray[y].Qty;
+							newRow.insertCell(3).innerHTML = "C$" + cartArray[y].Stotal;
+							subTotal1 = subTotal1 + cartArray[y].Stotal;
+							console.log(subTotal1);
+						}
+					}
+				}
+				computeTotal(subTotal1);
+				createOrderSummary(arrayheader2, computedArray);
+			}
+			//This function adds items to the cart // Also calls computeTotal and createOrderSummary function
+			function addToCart(theArray){
+				tableID1.innerHTML = ""; /// check later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+				createHeader(arrayHeader1, tableID1);
+				for (i = 0, j = 0; i < theArray.length; ++i){
+					if (addItemInput.value == allWhiskey[i].ID && addQtyInput.value <= allWhiskey[i].Max && addQtyInput.value != ""){
+						var asd = allWhiskey[i].Price * parseInt(addQtyInput.value);
+						console.log(cartArray)
+						cartArray.push(new createObjectPlus(allWhiskey[i].ID, allWhiskey[i].Price, addQtyInput.value, asd));
+						var subTotal = 0;
+						for (y = 0; y < cartArray.length; ++y){
+							var table = document.getElementsByTagName("table")[1];
+							var newRow = table.insertRow(j);
+							newRow.insertCell(0).innerHTML = cartArray[j].ID;
+							newRow.insertCell(1).innerHTML = "C$" + (cartArray[j].Price);
+							newRow.insertCell(2).innerHTML = cartArray[j].Qty;
+							newRow.insertCell(3).innerHTML = "C$" + (cartArray[j].Stotal).toFixed(2);
+							subTotal += parseFloat(cartArray[j].Stotal);
+							++j;
+						}
+						computeTotal(subTotal);
+						createOrderSummary(arrayheader2, computedArray);
+						console.log(cartArray)
+						break;
+					}
+					else if (addQtyInput.value > allWhiskey[i].Max || addQtyInput.value < 0 || addQtyInput.value == ""){
+						for (y = 0; y < cartArray.length; ++y){
+							var table = document.getElementsByTagName("table")[1];
+							var newRow = table.insertRow(j);
+							newRow.insertCell(0).innerHTML = cartArray[j].ID;
+							newRow.insertCell(1).innerHTML = "C$" + cartArray[j].Price;
+							newRow.insertCell(2).innerHTML = cartArray[j].Qty;
+							newRow.insertCell(3).innerHTML = "C$" + cartArray[j].Stotal;
+							++j;
+						}
+						alert("Invalid Input \nPlease Enter your Order Again");
+						break;
+					}
+					flagChanger.setAttribute("src", "flag1.jpg");
+					currencySelector.value = "CAD";
+				}
+				addItemInput.value = "";
+				addQtyInput.value = "";
+			}
+
+			
+			//Output desired Category when changed
+			function changeCategory(theArray){
+				createHeader(arrayHeader, tableID);
+				if (categorySelector.value == "Popular Whiskey"){
+					for (var i = 0, j = 0; i < theArray.length; ++i){
+						if (theArray[i].Category == "Popular Whiskey"){
+							var temp = document.createElement("img");
+							temp.setAttribute("src", allWhiskey[i].Image);
+							temp.setAttribute("height", "5%");
+							var newRow = tableID.insertRow(i);
+							newRow.insertCell(0).innerHTML = allWhiskey[i].ID;
+							newRow.insertCell(1).innerHTML = allWhiskey[i].Name;
+							newRow.insertCell(2).innerHTML = "C$" + allWhiskey[i].Price;
+							newRow.insertCell(3).innerHTML = allWhiskey[i].QOH;
+							newRow.insertCell(4).innerHTML = allWhiskey[i].Max;
+							newRow.insertCell(5).innerHTML = allWhiskey[i].Category;
+							newRow.insertCell(6).appendChild(temp);
+						}
+					}
+				}
+				else if (categorySelector.value == "Budget Whiskey"){
+					for (var i = 0, j = 0; i < theArray.length; ++i){
+						if (theArray[i].Category == "Budget Whiskey"){
+							var temp = document.createElement("img");
+							temp.setAttribute("src", allWhiskey[i].Image);
+							temp.setAttribute("height", "5%");
+							var newRow = tableID.insertRow(j);
+							newRow.insertCell(0).innerHTML = allWhiskey[i].ID;
+							newRow.insertCell(1).innerHTML = allWhiskey[i].Name;
+							newRow.insertCell(2).innerHTML = "C$" + allWhiskey[i].Price;
+							newRow.insertCell(3).innerHTML = allWhiskey[i].QOH;
+							newRow.insertCell(4).innerHTML = allWhiskey[i].Max;
+							newRow.insertCell(5).innerHTML = allWhiskey[i].Category;
+							newRow.insertCell(6).appendChild(temp);
+							++j;						
+						}
+					}
+					currencySelector.value = "CAD";
+					flagChanger.setAttribute("src", "flag1.jpg");
+				}
+				else if (categorySelector.value == "Mid-Class Whiskey"){
+					for (var i = 0, j = 0; i < theArray.length; ++i){
+						if (theArray[i].Category == "Mid-Class Whiskey"){
+							var temp = document.createElement("img");
+							temp.setAttribute("src", allWhiskey[i].Image);
+							temp.setAttribute("height", "5%");
+							var newRow = tableID.insertRow(j);
+							newRow.insertCell(0).innerHTML = allWhiskey[i].ID;
+							newRow.insertCell(1).innerHTML = allWhiskey[i].Name;
+							newRow.insertCell(2).innerHTML = "C$" + allWhiskey[i].Price;
+							newRow.insertCell(3).innerHTML = allWhiskey[i].QOH;
+							newRow.insertCell(4).innerHTML = allWhiskey[i].Max;
+							newRow.insertCell(5).innerHTML = allWhiskey[i].Category;
+							newRow.insertCell(6).appendChild(temp);
+							++j;
+						}
+					}
+				}
+				else if (categorySelector.value == "Top-Tier Whiskey"){
+					for (var i = 0, j = 0; i < theArray.length; ++i){
+						if (theArray[i].Category == "Top-Tier Whiskey"){
+							var temp = document.createElement("img");
+							temp.setAttribute("src", allWhiskey[i].Image);
+							temp.setAttribute("height", "5%");
+							var newRow = tableID.insertRow(j);
+							newRow.insertCell(0).innerHTML = allWhiskey[i].ID;
+							newRow.insertCell(1).innerHTML = allWhiskey[i].Name;
+							newRow.insertCell(2).innerHTML = "C$" + allWhiskey[i].Price;
+							newRow.insertCell(3).innerHTML = allWhiskey[i].QOH;
+							newRow.insertCell(4).innerHTML = allWhiskey[i].Max;
+							newRow.insertCell(5).innerHTML = allWhiskey[i].Category;
+							newRow.insertCell(6).appendChild(temp);
+							++j;
+						}
+					}
+				}
+				else {
+					for (var i = 0, j = 0; i < theArray.length; ++i){
+						var temp = document.createElement("img");
+						temp.setAttribute("src", allWhiskey[i].Image);
+						temp.setAttribute("height", "5%");
+						var newRow = tableID.insertRow(j);
+						newRow.insertCell(0).innerHTML = allWhiskey[i].ID;
+						newRow.insertCell(1).innerHTML = allWhiskey[i].Name;
+						newRow.insertCell(2).innerHTML = "C$" + allWhiskey[i].Price;
+						newRow.insertCell(3).innerHTML = allWhiskey[i].QOH;
+						newRow.insertCell(4).innerHTML = allWhiskey[i].Max;
+						newRow.insertCell(5).innerHTML = allWhiskey[i].Category;
+						newRow.insertCell(6).appendChild(temp);
+						++j;
+					}
+				}
+				currencySelector.value = "CAD";
+				flagChanger.setAttribute("src", "flag1.jpg");
+			}
+			//Output desired currency when changed				//first Table loop
+			function currencyChange(theArray, theArray1){
+				if (categorySelector.value == "Popular Whiskey"){
+					for (var j = 0, i = 0; j < theArray.length; ++j){
+						if (theArray[j].Category == "Popular Whiskey"){//if && iff check later if can be shorten
+							if (currencySelector.value == "USD"){
+								flagChanger.setAttribute("src", "flag2.jpg");
+								tableID.rows[i].cells[num].innerHTML ="$" + (.71 * theArray[j].Price).toFixed(2);
+								++i;
+							}
+							else if (currencySelector.value == "GBP"){
+								flagChanger.setAttribute("src", "flag3.jpg");
+								tableID.rows[i].cells[num].innerHTML ="£" + (.54 * theArray[j].Price).toFixed(2);  
+								++i;
+							}
+							else{
+								flagChanger.setAttribute("src", "flag1.jpg");
+								tableID.rows[i].cells[num].innerHTML ="C$" + (theArray[j].Price).toFixed(2);
+								++i;
+							} 
+						}
+					}
+				}
+				else if (categorySelector.value == "Budget Whiskey") {
+					for (var j = 0, i = 0; j < theArray.length; ++j){
+						if (theArray[j].Category == "Budget Whiskey"){
+							if (currencySelector.value == "USD"){
+								flagChanger.setAttribute("src", "flag2.jpg");
+								tableID.rows[i].cells[num].innerHTML ="$" + (.71 * theArray[j].Price).toFixed(2);
+								++i;
+							}
+							else if (currencySelector.value == "GBP"){
+								flagChanger.setAttribute("src", "flag3.jpg");
+								tableID.rows[i].cells[num].innerHTML ="£" + (.54 * theArray[j].Price).toFixed(2);  
+								++i;
+							}
+							else{
+								flagChanger.setAttribute("src", "flag1.jpg");
+								tableID.rows[i].cells[num].innerHTML ="C$" + (theArray[j].Price).toFixed(2);
+								++i;
+							}
+						}
+					}
+				}
+				else if (categorySelector.value == "Mid-Class Whiskey") {
+					for (var j = 0, i = 0; j < theArray.length; ++j){
+						if (theArray[j].Category == "Mid-Class Whiskey"){
+							if (currencySelector.value == "USD"){
+								flagChanger.setAttribute("src", "flag2.jpg");
+								tableID.rows[i].cells[num].innerHTML ="$" + (.71 * theArray[j].Price).toFixed(2);
+								++i;
+							}
+							else if (currencySelector.value == "GBP"){
+								flagChanger.setAttribute("src", "flag3.jpg");
+								tableID.rows[i].cells[num].innerHTML ="£" + (.54 * theArray[j].Price).toFixed(2);  
+								++i;
+							}
+							else{
+								flagChanger.setAttribute("src", "flag1.jpg");
+								tableID.rows[i].cells[num].innerHTML ="C$" + (theArray[j].Price).toFixed(2);
+								++i;
+							}
+						}
+					}
+				}
+				else if (categorySelector.value == "Top-Tier Whiskey") {
+					for (var j = 0, i = 0; j < theArray.length; ++j){
+						if (theArray[j].Category == "Top-Tier Whiskey"){
+							if (currencySelector.value == "USD"){
+								flagChanger.setAttribute("src", "flag2.jpg");
+								tableID.rows[i].cells[num].innerHTML ="$" + (.71 * theArray[j].Price).toFixed(2);
+								++i;
+							}
+							else if (currencySelector.value == "GBP"){
+								flagChanger.setAttribute("src", "flag3.jpg");
+								tableID.rows[i].cells[num].innerHTML ="£" + (.54 * theArray[j].Price).toFixed(2);  
+								++i;
+							}
+							else{
+								flagChanger.setAttribute("src", "flag1.jpg");
+								tableID.rows[i].cells[num].innerHTML ="C$" + (theArray[j].Price).toFixed(2);
+								++i;
+							}
+						}
+					}
+				}
+				else {
+					for (var j = 0, i = 0; j < theArray.length; ++j){
+						if (currencySelector.value == "USD"){
+							flagChanger.setAttribute("src", "flag2.jpg");
+							tableID.rows[i].cells[num].innerHTML ="$" + (.71 * theArray[j].Price).toFixed(2);
+							++i;
+						}
+						else if (currencySelector.value == "GBP"){
+							flagChanger.setAttribute("src", "flag3.jpg");
+							tableID.rows[i].cells[num].innerHTML ="£" + (.54 * theArray[j].Price).toFixed(2);  
+							++i;
+						}
+						else{
+							flagChanger.setAttribute("src", "flag1.jpg");
+							tableID.rows[i].cells[num].innerHTML ="C$" + (theArray[j].Price).toFixed(2);
+							++i;
+						}
+					}
+				}//END of First Table loop
+				
+				//Cart Price && Subtotal Change Currency 				//Start of Second table loop
+				if (currencySelector.value == "USD"){
+					for (var i = 0; i < theArray1.length; ++i){
+						flagChanger.setAttribute("src", "flag2.jpg");
+						tableID1.rows[i].cells[num1].innerHTML ="$" + (.71 * theArray1[i].Price).toFixed(2);
+						tableID1.rows[i].cells[num2].innerHTML ="$" + (.71 * theArray1[i].Stotal).toFixed(2);
+					}
+				}
+				else if (currencySelector.value == "GBP"){
+					for (var i = 0; i < theArray1.length; ++i){
+						flagChanger.setAttribute("src", "flag3.jpg");
+						tableID1.rows[i].cells[num1].innerHTML ="£" + (.54 * theArray1[i].Price).toFixed(2);  
+						tableID1.rows[i].cells[num2].innerHTML ="£" + (.54 * theArray1[i].Stotal).toFixed(2);
+					}
+				}
+				else{
+					for (var i = 0; i < theArray1.length; ++i){
+						flagChanger.setAttribute("src", "flag1.jpg");
+						tableID1.rows[i].cells[num1].innerHTML ="C$" + (theArray1[i].Price).toFixed(2);
+						tableID1.rows[i].cells[num2].innerHTML ="C$" + (theArray1[i].Stotal).toFixed(2);
+					}
+				} 
+				//Summary of Orders Price change when currenc change
+				//start of thrid table loop
+				if (currencySelector.value == "USD"){
+					for (var i = 0, y = 0; i < arrayheader2.length; ++i, ++y){
+						flagChanger.setAttribute("src", "flag2.jpg");
+						tableID2.rows[i].cells[num1].innerHTML ="$" + parseFloat(.71 * computedArray[y]);
+					}
+				}
+				else if (currencySelector.value == "GBP"){
+					for (var i = 0, y = 0; i < arrayheader2.length; ++i, ++y){
+						flagChanger.setAttribute("src", "flag3.jpg");
+						tableID2.rows[i].cells[num1].innerHTML ="£" + parseFloat(.54 * computedArray[y]);
+					}
+				}
+				else {
+					for(var i = 0, y = 0; i < arrayheader2.length; ++i, ++y){
+						flagChanger.setAttribute("src", "flag1.jpg");
+						tableID2.rows[i].cells[num1].innerHTML ="C$" + parseFloat(computedArray[y]);
+					}
+				}
+				
+			}
+			//Create Table Header
+			function createHeader(arrayHead, outputTable){
+                outputTable.innerHTML = "";   
+                var tHead = document.createElement("thead");
+                for(var i = 0; i < arrayHead.length; ++i){
+                    tHead.appendChild(document.createElement("th")).appendChild(document.createTextNode(arrayHead[i]));
+                    outputTable.appendChild(tHead);
+                }
+			}
+			//Creates object for cart
+			function createObjectPlus(id, price, qty, st){
+				this.ID = id;
+				this.Price = price;
+				this.Qty = qty;
+				this.Stotal = st;
+			}
+			//create object for allWhiskey
+			function createObject(id, name, price, qoh, max, catg, img, desc, rev){
+				this.ID = id;
+				this.Name = name;
+				this.Price = price;
+				this.QOH = qoh;
+				this.Max = max;
+				this.Category = catg;
+				this.Image = img;
+				this.Desc = desc
+				this.Rev = rev;
+			}
+			//Create dropdown options when the pageloads
+			function populateCategory(theArray, theElement){
+				for (var i = 0; i < theArray.length; ++i){
+					var temp = document.createElement("option");
+					temp.innerText += theArray[i];
+					theElement.appendChild(temp);
+				}
+				createHeader(arrayHeader, tableID);
+				loadAllProduct(allWhiskey);
+				createOrderSummary(arrayheader2, num3);
+			}
+			// Loads all whiskey products
+			function loadAllProduct(theArray) {
+				for (var i = 0; i < theArray.length; ++i){
+					var temp = document.createElement("img");
+					temp.setAttribute("src", allWhiskey[i].Image);
+					temp.setAttribute("height", "5%");
+					var table = document.getElementsByTagName("table")[0];
+					var newRow = table.insertRow(i);
+					newRow.insertCell(0).innerHTML = allWhiskey[i].ID;
+					newRow.insertCell(1).innerHTML = allWhiskey[i].Name;
+					newRow.insertCell(2).innerHTML = "C$" + allWhiskey[i].Price;
+					newRow.insertCell(3).innerHTML = allWhiskey[i].QOH;
+					newRow.insertCell(4).innerHTML = allWhiskey[i].Max;
+					newRow.insertCell(5).innerHTML = allWhiskey[i].Category;
+					newRow.insertCell(6).appendChild(temp);
+				}
+			}
+			//Print out identifier for each row and print out the break down of total cost
+			function createOrderSummary(theArray, cell1){
+				tableID2.innerHTML = "";
+				for (i = 0; i < theArray.length; ++i){
+					var table = document.getElementsByTagName("table")[2];
+					var newRow = table.insertRow(i);
+					newRow.insertCell(0).innerHTML = theArray[i];
+					newRow.insertCell(1).innerHTML = "C$" + parseFloat((cell1[i])).toFixed(2);
+				}
+				
+			}
+			
+		</script>
+	</body>
+</html>

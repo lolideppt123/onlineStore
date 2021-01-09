@@ -1,0 +1,377 @@
+/* I started with the pixel size of 375px */
+
+section {
+    display: block;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    background-color: #dee3e2;
+    color: #321428;
+}
+
+#wrapper {
+    width: 100%;
+    margin: 0 auto;
+    /* min-height: calc(100vh - 204px - 305.35px); */
+}
+
+header {
+    text-align: center;
+    background-color: #321428;
+}
+
+header a img {
+    height: 130px;
+    width: 140px;
+}
+
+p {
+    color: #321428;
+    font-size: small;
+    margin: 5px;
+    padding: 0;
+}
+
+p, th {
+    font-weight: bold;
+}
+
+form {
+    width: 100%;
+}
+
+table {
+    text-align: center;
+    background-color: #f5f4e9;
+    border-color: #321428;
+}
+
+fieldset {
+    border-color: #c9b981;
+    display: inline-block;
+    width: 94%;
+    max-height: 250px;
+    overflow: auto;
+}
+
+legend {
+    text-align: center;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: medium;
+    font-style: italic;
+    color: #321428;
+    margin-left: 5px;
+}
+
+input, textarea {
+    border: 1px solid #666;
+    border-color: #c9b981;
+}
+
+th:nth-child(4), th:nth-child(5), td:nth-child(4), td:nth-child(5), #dateArea {
+    display: none;
+}
+
+footer {
+    background-color: #321428;
+    text-align: center;
+    padding: 0;
+}
+
+footer p:nth-child(1) {
+    margin-bottom: 3px;
+}
+
+footer p {
+    text-align: center;
+    color: #c9b981;
+    padding: 2px 0;
+    margin: 5px 0 0 0;
+    font-size: 10px;
+}
+
+footer nav a {
+    text-decoration: none;
+    display: inline;
+    color: #c9b981;
+}
+footer img {
+    width: 30px;
+    height: 30px;
+    margin: 0 3px;
+}
+
+#dateCurrency {
+    float: right;
+    text-align: right;
+}
+
+#currencySelector {
+    background-color: #dee3e2;
+}
+
+#curFlag {
+    width: 25px;
+}
+
+#displayFilter  {
+    background-color: #dee3e2;
+    color: #321428;
+    border: 1px #321428 solid;
+}
+
+#displayFilter:hover {
+    background-color: #f5f4e9;
+}
+
+#secondSection, #thirdSection {
+    margin-top: 10px;
+    text-align: center;
+}
+
+#secondSection p {
+    width: 100%;
+}
+
+#addItemQty {
+    margin-left: 21px;
+}
+
+#thirdSection {
+    color: black;
+    font-size: 12px;
+}
+
+#thirdSection .button{
+    float: right;
+}
+
+#fourthSection {
+    margin: 10px 0;
+}
+
+#reviewDesc {
+    max-width: 300px;
+}
+
+
+.button {
+    background-color: #f5f4e9;
+}
+
+.button:hover {
+    background-color: #c9b981;
+}
+
+/*This is my code for the width of 600px */
+
+
+@media all and (min-width: 600px){
+    body {
+        font-size: 14px;
+    }
+
+    header a img {
+        height: 170px;
+        width: 160px;
+    }
+
+    fieldset {
+        width: 95%;
+        max-height: 500px;
+        overflow: auto;
+    }
+
+    legend {
+        font-size: 25px;
+    }
+    
+    p {
+        font-size: 16px;
+    }
+
+    footer p {
+        font-size: 14px;
+    }
+
+    footer img {
+        height: 35px;
+        width: 35px;
+    }
+
+    #dateCurrency {
+        margin-right: 4px;
+    }
+
+    #curFlag {
+        width: 35px;
+    }
+
+    #displayFilter {
+        height: 25px;
+        width: 160px;
+    }
+
+    #addItemId, #addItemQty, #reviewId {
+        margin-bottom: 2px;
+        height: 20px;
+    }
+
+    #addItemQty {
+        margin-left: 26px;
+    }
+
+    #thirdSection {
+        font-size: 16px;
+    }
+
+    #thirdSection .button {
+        margin: 0 10px, 20px 0;
+    }
+
+    #checkOutBtn {
+        margin-right: 25px;
+    }
+
+    #addItemId, #addItemQty {
+        width: 210px;
+    }
+
+    #reviewId {
+        width: 205px;
+    }
+
+    #firstcolumn, #secondcolumn {
+        text-align: center;
+    }
+
+    .button {
+        height: 30px;
+        font-size: 16px;
+    }
+
+}
+
+
+
+
+/* I want my website to have a max with of 1200px and apply its rules at 900px */
+ 
+
+
+@media all and (min-width: 900px) {
+    body {
+        font-size: medium;
+    }
+
+    header a img {
+        height: 200px;
+        width: 200px;
+    }
+
+    header nav {
+        margin-bottom: 10px;
+    }
+
+    form {
+        padding-bottom: 410px;
+    }
+    /*fieldset at 97.5% I think is the appropriate percentage I dont even know what's in the remaining 2.5% i just kinda play around with it */
+    fieldset {
+        width: 97.5%;
+        max-height: 650px;
+        overflow: auto;
+    }
+
+    legend {
+        font-size: 30px;
+    }
+
+    th:nth-child(4), th:nth-child(5), td:nth-child(4), td:nth-child(5) {
+        display: table-cell;
+    }
+
+    p {
+        font-size: medium;
+    }
+    /* This is the code that only limits the page design to 1200px*/
+    #wrapper {
+        max-width: 1200px;
+    }
+
+    #dateCurrency {
+        margin-right: 3px;
+    }
+
+    #currency, #dateArea {
+        display: inline-block;
+    }
+
+    #currencySelector {
+        background-color: #dee3e2;
+        border: 1px #321428 solid;
+    }
+
+    #currencySelector:hover {
+        background-color: #f5f4e9;
+    }
+
+    #secondSection, #fourthSection {
+        text-align: left;
+        width: 45%;
+        float: left;
+        display: block;
+    }
+
+    #addItemId, #addItemQty, #reviewId {
+        height: 20px;
+        width: 200px;
+    }
+
+    #addItemQty {
+        margin-left: 27px;
+    }
+
+    #thirdSection {
+        float: right;
+        width: 50%;
+        margin-right: 15px;
+        font-size: 18px;
+        display: block;
+    }
+
+    #firstcolumn {
+        float: left;
+    }
+
+    #secondcolumn, #secondcolumn p {
+        text-align: end;
+    }
+
+    #secondcolumn p {
+        margin-right: 160px;
+    }
+
+    #secondcolumn a:nth-child(4) {
+        margin-right: 150px;
+    }
+    
+    #contactUs {
+        font-size: 14px;
+    }
+
+    .button {
+        height: 30px;
+        margin-top: 5px;
+        font-size: 16px;
+    }
+
+}
+
+
+
+
+
+
